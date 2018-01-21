@@ -12,15 +12,15 @@ Now it can:
 
 # How to Use
 
-I'm in the process of writing a more detailed blog post for those who just started messing with python in Blender or programming in general, but if you're semi-familiar with Python, VS Code, and the command line the following should make sense.
+I'm in the process of writing a more detailed blog post for those who just started messing with python in Blender or programming in general, but if you're semi-familiar with Python, VS Code, and the command line the following should make sense. If you have any questions or suggestions, don't hesitate to file an issue.
 
 ## Installing Python and Getting PTVSD
 
 Install Python 3 with pip and check add to PATH.
-    - If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It uses `where python` or `whereis python` or `which python` depending on the OS to determine where python is. I only have windows at the moment, so only that is tested, but it should work.
+   - If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It uses `where python` or `whereis python` or `which python` depending on the OS to determine where python is. I only have windows at the moment, so only that is tested, but it should work.
 
 `pip install ptvsd==3.0.0"
-    - 3.0 because that was what was recommended in the VS Code documentation.
+   - 3.0 because that was what was recommended in the VS Code documentation.
 
 ## Setting up your Addon
 
@@ -31,11 +31,11 @@ In Blender go to: `User Preferences > File` and set the path to `Scripts` to the
 ```
 Blender Stuff
 └── addons
-    ├── your-addon-folder
-        ├── __init__.py
-        ├── ...etc
-    ├── another-addon
-    ├── ...
+   ├── your-addon-folder
+      ├── __init__.py
+      ├── ...etc
+   ├── another-addon
+   ├── ...
 ```
 
 Now remove your addon from Blender if it was installed, save settings, and when you restart your addon should be installed automatically.
@@ -61,16 +61,16 @@ Install the Python extension for VS Code if you haven't already.
 Go to the Debugging tab and add a configuration. Pick Python. You'll want the configuration that looks like this, you can delete the rest. There's no need to change the defaults. 
 
 ```JSON
-    {
-        "name": "Python: Attach",
-        "type": "python",
-        "request": "attach",
-        "localRoot": "${workspaceFolder}",
-        "remoteRoot": "${workspaceFolder}",
-        "port": 3000,
-        "secret": "my_secret",
-        "host": "localhost"
-    },
+   {
+      "name": "Python: Attach",
+      "type": "python",
+      "request": "attach",
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "${workspaceFolder}",
+      "port": 3000,
+      "secret": "my_secret",
+      "host": "localhost"
+   },
 ```
 
 Now when you run the debugger with this config in Blender the console should print "Debugger is Attached" if it was still waiting (it should still attach even if it wasn't, it just won't tell you).
@@ -80,6 +80,16 @@ Now when you run the debugger with this config in Blender the console should pri
 At this point you should be able to add a breakpoint and when you trigger it in Blender, Blender should freeze and VS Code should pause on the breakpoint.
 
 Note though that if you make changes to the file, Blender will not detect them. Have open `User Preferences > Addons` so you can toggle your addon on and off when you make changes. If anyone knows any way to improve this I'd love to know.
+
+### Editing Source Code
+
+It is possible to edit the Blender source code but it can be a bit tricky to get it to detect changes (nevermind live editing is buggy anyways).
+
+From blender you can right click just about anything and click "Edit Source" to get it in the text editor. Then to find the path of the file, go to `Text > Save As` and copy it from there.
+
+Open the file in VS Code, connect to the debugging server, make a change and save it.
+
+Now in Blender the text editor will show this little red button in the top left. Click that and reload the file. Then in `Text Editor > Properties` turn on `Live Edit` if you haven't already. Now to actually get Blender to detect any changes you made just type a single character (like add a space anywhere) and *then* it will detect your changes.
 
 # Notes
 

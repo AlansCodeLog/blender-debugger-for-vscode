@@ -1,7 +1,7 @@
 bl_info = {
    'name': 'Debugger for VS Code',
    'author': 'Alan North',
-   'version': (0, 0, 1),
+   'version': (0, 0, 2),
    'blender': (2, 79, 0),
    "description": "Starts debugging server for VS Code.",
    'location': 'In search (default shortcut:space) type "Debug"',

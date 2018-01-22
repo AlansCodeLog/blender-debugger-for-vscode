@@ -46,7 +46,7 @@ Install the addon.
 
 If it did not find the path it'll say "PTVSD not Found", you'll have to set it manually. It's wherever python is + "\lib\site-packages". NO trailing backslash.
 
-If you want, increase the timeout for the confirmation. It'll print "Waiting..." in the console ~ every second until it prints it's timedout. This does not mean the server has timedout *just* the confirmation listener.
+If you want, increase the timeout for the confirmation. It'll print "Waiting..." in the console every second until it prints it's timedout. This does not mean the server has timedout *just* the confirmation listener.
 
 Open up Blender's search (default shortcut: space), type "Debug".
 

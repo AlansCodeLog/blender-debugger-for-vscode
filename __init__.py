@@ -53,8 +53,8 @@ def check_for_ptvsd():
    if python_exe is not None:
       python_exe = str(python_exe.communicate()[0], "utf-8")
       match = re.search(".*(\\\\|/)", python_exe).group() 
-      if os.path.exists(match+"\lib\site-packages\ptvsd"):
-         return match+"\lib\site-packages"
+      if os.path.exists(match+"lib\site-packages\ptvsd"):
+         return match+"lib\site-packages"
 
    #check in our path
    for path in sys.path:
@@ -90,8 +90,8 @@ class DebuggerPreferences(bpy.types.AddonPreferences):
 
 # check if debugger has attached
 def check_done(i, modal_limit):
-   if i % 100 == 0:
-      print("Waiting")
+   if i == 0 or i % 60 == 0:
+      print("Waiting...")
    if i > modal_limit:
       print("Attach Confirmation Listener Timed Out")
       return {"CANCELLED"}
@@ -107,7 +107,7 @@ class DebuggerCheck(bpy.types.Operator):
 
    _timer = None
    count = 0
-   modal_limit = 20000
+   modal_limit = 20*60
 
    # call check_done
    def modal(self, context, event):
@@ -120,7 +120,7 @@ class DebuggerCheck(bpy.types.Operator):
       # set initial variables
       self.count = 0
       prefs = bpy.context.user_preferences.addons[__name__].preferences
-      self.modal_limit = prefs.timeout*100
+      self.modal_limit = prefs.timeout*60
 
       wm = context.window_manager
       self._timer = wm.event_timer_add(0.1, context.window)
@@ -140,14 +140,14 @@ class DebugServerStart(bpy.types.Operator):
    def execute(self, context):
       #get ptvsd and import if exists
       prefs = bpy.context.user_preferences.addons[__name__].preferences
-      ptvsd_path = os.path.abspath(prefs.path)
+      ptvsd_path = prefs.path
 
       #actually check ptvsd is still available
       if ptvsd_path == "PTVSD not Found":
          self.report({"ERROR"}, "Couldn't detect ptvsd, please specify the path manually in the addon preferences or reload the addon if you installed ptvsd after enabling it.")
          return {"CANCELLED"}
-
-      if not os.path.exists(ptvsd_path+"/ptvsd"):
+      
+      if not os.path.exists(os.path.abspath(ptvsd_path+"/ptvsd")):
          self.report({"ERROR"}, "Can't find ptvsd at: %r/ptvsd." % ptvsd_path)
          return {"CANCELLED"}
 

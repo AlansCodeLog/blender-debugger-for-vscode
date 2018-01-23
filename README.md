@@ -14,14 +14,21 @@ Now it can:
 
 # How to Use
 
-I'm in the process of writing a more detailed blog post for those who just started messing with python in Blender or programming in general, but if you're semi-familiar with Python, VS Code, and the command line the following should make sense. If you have any questions or suggestions, don't hesitate to file an issue.
+I have made a video (click the image below) for those who just started messing with python in Blender or programming in general, but if you're semi-familiar with Python, VS Code, and the command line the following should make sense. If you have any questions or suggestions, don't hesitate to file an issue.
+
+<p align="center" style="position:relative;">
+   <a href="https://www.youtube.com/watch?v=UVDf2VSmRvk" title="Click to go to Video">
+      <img alt="youtube video" src="https://img.youtube.com/vi/UVDf2VSmRvk/maxresdefault.jpg" height="300" style="margin:0 auto;" />
+   </a>
+</p>
+
 
 ## Installing Python and Getting PTVSD
 
 Install Python 3 with pip and check add to PATH.
    - If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It uses `where python` or `whereis python` or `which python` depending on the OS to determine where python is. I only have windows at the moment, so only that is tested, but it should work.
 
-`pip install ptvsd==3.0.0"
+`pip install ptvsd==3.0.0`
    - Newer versions do not work, you will just get an error in VS Code trying to connect. later versions aren't supported yet see [Debugging Python with VS Code](https://code.visualstudio.com/docs/python/debugging#_remote-debugging) and [#514](/Microsoft/vscode-python/issues/514).
 
 ## Setting up your Addon

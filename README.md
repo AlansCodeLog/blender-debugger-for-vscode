@@ -1,6 +1,6 @@
 ﻿# Blender Debugger for VS Code
 
-Inspired by [Blender-VScode-Debugger](/Barbarbarbarian/Blender-VScode-Debugger) which was itself inspired by this [remote_debugger](/sybrenstuvel/random-blender-addons/blob/master/remote_debugger.py) for pycharm as explained in this [Blender Developer's Blog post](https://code.blender.org/2015/10/debugging-python-code-with-pycharm/). 
+Inspired by [Blender-VScode-Debugger](https://github.com/Barbarbarbarian/Blender-VScode-Debugger) which was itself inspired by this [remote_debugger](https://github.com/sybrenstuvel/random-blender-addons/blob/master/remote_debugger.py) for pycharm as explained in this [Blender Developer's Blog post](https://code.blender.org/2015/10/debugging-python-code-with-pycharm/). 
 
 
 Since the VS Code one wasn't really well documented and it looked kind of dead, once I figured it out, I was just going to add the documentation, but then I ended up rewriting the whole thing.
@@ -9,6 +9,8 @@ Now it can:
 
 - Auto-detect where python is and auto set the path to ptvsd if installed.
 - Tell you when the debugger has actually attached.
+
+![Image Showing VS Code side by side with Blender paused at a breakpoint. In the console, a "Debugger is Attached" Statement is printed.](./Example.png)
 
 # How to Use
 
@@ -20,7 +22,7 @@ Install Python 3 with pip and check add to PATH.
    - If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It uses `where python` or `whereis python` or `which python` depending on the OS to determine where python is. I only have windows at the moment, so only that is tested, but it should work.
 
 `pip install ptvsd==3.0.0"
-   - 3.0 because that was what was recommended in the VS Code documentation.
+   - Newer versions do not work, you will just get an error in VS Code trying to connect. later versions aren't supported yet see [Debugging Python with VS Code](https://code.visualstudio.com/docs/python/debugging#_remote-debugging) and [#514](/Microsoft/vscode-python/issues/514).
 
 ## Setting up your Addon
 
@@ -73,7 +75,7 @@ Go to the Debugging tab and add a configuration. Pick Python. You'll want the co
    },
 ```
 
-Now when you run the debugger with this config in Blender the console should print "Debugger is Attached" if it was still waiting (it should still attach even if it wasn't, it just won't tell you).
+Now when you run the debugger with this config in Blender and VS Code the console should print "Debugger is Attached" if it was still waiting (it should still attach even if it wasn't, it just won't tell you).
 
 ## How to Use
 
@@ -93,9 +95,4 @@ Now in Blender the text editor will show this little red button in the top left.
 
 # Notes
 
-The addon also detects python if PYTHONPATH is set (because Blender will add it to sys.path) or if you used the Python bundled with Blender to install ptvsd (but that's a bit of a pain because it doesn't have pip installed unless you want to install it manually)
-
-
-
-
-
+The addon also detects python if PYTHONPATH is set (because Blender will add it to sys.path) or if you used the Python bundled with Blender to install ptvsd (but that's a bit of a pain because it doesn't have pip installed unless you want to install it manually).

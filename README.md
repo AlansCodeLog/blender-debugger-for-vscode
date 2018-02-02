@@ -1,4 +1,4 @@
-﻿# Blender Debugger for VS Code
+# Blender Debugger for VS Code
 
 Inspired by [Blender-VScode-Debugger](https://github.com/Barbarbarbarian/Blender-VScode-Debugger) which was itself inspired by this [remote_debugger](https://github.com/sybrenstuvel/random-blender-addons/blob/master/remote_debugger.py) for pycharm as explained in this [Blender Developer's Blog post](https://code.blender.org/2015/10/debugging-python-code-with-pycharm/). 
 
@@ -8,6 +8,7 @@ Since the VS Code one wasn't really well documented and it looked kind of dead, 
 Now it can:
 
 - Auto-detect where python is and auto set the path to ptvsd if installed.
+- Warn you if you installed the wrong ptvsd version (for VS Code, for Visual Studio it should still work)
 - Tell you when the debugger has actually attached.
 
 ![Image Showing VS Code side by side with Blender paused at a breakpoint. In the console, a "Debugger is Attached" Statement is printed.](./Example.png)
@@ -29,7 +30,8 @@ Install Python 3 with pip and check add to PATH.
    - If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It uses `where python` or `whereis python` or `which python` depending on the OS to determine where python is. I only have windows at the moment, so only that is tested, but it should work.
 
 `pip install ptvsd==3.0.0`
-   - Newer versions do not work, you will just get an error in VS Code trying to connect. later versions aren't supported yet see [Debugging Python with VS Code](https://code.visualstudio.com/docs/python/debugging#_remote-debugging) and [#514](/Microsoft/vscode-python/issues/514).
+   - Newer versions will not work, the add-on will warn you in the console if the version is above 3.0.0. Later versions aren't supported yet in VS Code, and it will throw an error when trying to connect. See [Debugging Python with VS Code](https://code.visualstudio.com/docs/python/debugging#_remote-debugging) and [#514](/Microsoft/vscode-python/issues/514).
+   - For Visual Studio, later versions should work depending on the Visual Studio version. I have never used Visual Studio, but you can find more info on setting everything up here: [Remotely Debugging Python Code on Linux](https://docs.microsoft.com/en-us/visualstudio/python/debugging-python-code-on-remote-linux-machines#connection-troubleshooting). (it is not Linux specific)
 
 ## Setting up your Addon
 

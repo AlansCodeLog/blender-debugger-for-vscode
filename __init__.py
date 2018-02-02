@@ -1,7 +1,7 @@
 bl_info = {
    'name': 'Debugger for VS Code',
    'author': 'Alan North',
-   'version': (0, 0, 2),
+   'version': (0, 1, 0),
    'blender': (2, 79, 0),
    "description": "Starts debugging server for VS Code.",
    'location': 'In search (default shortcut:space) type "Debug"',
@@ -156,6 +156,10 @@ class DebugServerStart(bpy.types.Operator):
 
       global ptvsd #so we can do check later
       import ptvsd
+
+      version = re.sub("\.", "", ptvsd.__version__)
+      if int(version) > 3000: 
+         print("Warning: PTVSD version " + ptvsd.__version__ + " is greater than 3.0.0, it will not work with VS Code.")
 
       # can only be attached once, no way to detach (at least not that I understand?)
       try:

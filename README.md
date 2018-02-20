@@ -26,8 +26,8 @@ I have made a video (click the image below) for those who just started messing w
 
 ## Installing Python and Getting PTVSD
 
-Install Python 3 with pip and check add to PATH.
-   - If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It uses `where python` or `whereis python` or `which python` depending on the OS to determine where python is. I only have windows at the moment, so only that is tested, but it should work.
+Install Python 3 with pip and check add to PATH.<sup id="n1">[1](#f1)</sup>
+   - If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It uses `where python` or `whereis python` or `which python` depending on the OS to determine where python is and uses the first path given<sup id="n2">[2](#f2)</sup>.
 
 `pip install ptvsd==3.0.0`
    - Newer versions will not work, the add-on will warn you in the console if the version is above 3.0.0. Later versions aren't supported yet in VS Code, and it will throw an error when trying to connect. See [Debugging Python with VS Code](https://code.visualstudio.com/docs/python/debugging#_remote-debugging) and [#514](/Microsoft/vscode-python/issues/514).
@@ -69,7 +69,9 @@ Open your addon folder (e.g. "C:\Code\Blender Stuff\addons\myaddon").
 
 Install the Python extension for VS Code if you haven't already.
 
-Go to the Debugging tab and add a configuration. Pick Python. You'll want the configuration that looks like this, you can delete the rest. There's no need to change the defaults. 
+In the lower left ([see #3 here](https://code.visualstudio.com/docs/python/python-tutorial#_prerequisites)), VS Code should have auto detected your Python install and set it as the interpreter.
+
+Go to the Debugging tab and add a configuration. Pick Python. You'll want the configuration that looks like this, no need to change the defaults, you can delete the rest. 
 
 ```JSON
    {
@@ -104,4 +106,6 @@ Now in Blender the text editor will show this little red button in the top left.
 
 # Notes
 
-The addon also detects python if PYTHONPATH is set (because Blender will add it to sys.path) or if you used the Python bundled with Blender to install ptvsd (but that's a bit of a pain because it doesn't have pip installed unless you want to install it manually).
+<a id="f1" href="#n1">1.</a> Technically, the add-on will work with Python 2 as well since it doesn't use Python itself, just the ptvsd package, so it doesn't really matter whether you installed it with Python 2 or 3 because the package is compatible with both. On the VS Code side though, the Python extension does need to know where Python is (though not ptvsd), but it still will connect if it's using Python 2, just IntelliSense recommendations the will be wrong.
+
+<a id="f2" href="#n2">2.</a> The addon also detects python if PYTHONPATH is set (because Blender will add it to sys.path) or if you used the Python bundled with Blender to install ptvsd (but that's a bit of a pain because it doesn't have pip installed unless you want to install it manually).

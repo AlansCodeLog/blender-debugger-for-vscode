@@ -1,4 +1,4 @@
-# Blender Debugger for VS Code
+﻿# Blender Debugger for VS Code (and Visual Studio)
 
 Inspired by [Blender-VScode-Debugger](https://github.com/Barbarbarbarian/Blender-VScode-Debugger) which was itself inspired by this [remote_debugger](https://github.com/sybrenstuvel/random-blender-addons/blob/master/remote_debugger.py) for pycharm as explained in this [Blender Developer's Blog post](https://code.blender.org/2015/10/debugging-python-code-with-pycharm/). 
 
@@ -67,9 +67,9 @@ Click `Debug: Start Debug Server for VS Code`. Note: you can only start the serv
 
 Open your addon folder (e.g. "C:\Code\Blender Stuff\addons\myaddon").
 
-Install the Python extension for VS Code if you haven't already.
+Install the Python extension for VS Code if you haven't already. For Visual Studio see [Installing Python Support](https://docs.microsoft.com/en-us/visualstudio/python/installing-python-support-in-visual-studio).
 
-In the lower left ([see #3 here](https://code.visualstudio.com/docs/python/python-tutorial#_prerequisites)), VS Code should have auto detected your Python install and set it as the interpreter.
+In the lower left ([see #3 here](https://code.visualstudio.com/docs/python/python-tutorial#_prerequisites)), VS Code should have auto detected your Python install and set it as the interpreter. For Visual Studio see [Managing Python Environments](https://docs.microsoft.com/en-us/visualstudio/python/managing-python-environments-in-visual-studio).
 
 Go to the Debugging tab and add a configuration. Pick Python. You'll want the configuration that looks like this, no need to change the defaults, you can delete the rest. 
 
@@ -104,6 +104,13 @@ Open the file in VS Code, connect to the debugging server, make a change and sav
 
 Now in Blender the text editor will show this little red button in the top left. Click that and reload the file. Then in `Text Editor > Properties` turn on `Live Edit` if you haven't already. Now to actually get Blender to detect any changes you made just type a single character (like add a space anywhere) and *then* it will detect your changes.
 
+# Troubleshooting
+
+- Check you installed the correct ptvsd version.
+- To determine whether the problem is on Blender's side or your editor's: Close Blender and download/copy this [test script](https://gist.github.com/AlansCodeLog/ff1b246a8e31938e1c3dbfdcbb90522f) and run it with Python then and try to connect to the server with your editor. If you're still getting problem's than the problem is with VS Code.
+   - Check your detected your Python install, or set it manually.
+   - For VS Code try reinstalling the VS Code Python extension.
+   
 # Notes
 
 <a id="f1" href="#n1">1.</a> Technically, the add-on will work with Python 2 as well since it doesn't use Python itself, just the ptvsd package, so it doesn't really matter whether you installed it with Python 2 or 3 because the package is compatible with both. On the VS Code side though, the Python extension does need to know where Python is (though not ptvsd), but it still will connect if it's using Python 2, just IntelliSense recommendations the will be wrong.

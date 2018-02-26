@@ -23,6 +23,11 @@ I have made a video (click the image below) for those who just started messing w
    </a>
 </p>
 
+## Note on Downloading
+
+The best way to download is through the green `Clone or Download` button above.
+
+If you download the add-on from the releases page, please make sure to rename the zip to `blender-debugger-for-vscode-master.zip`, otherwise the full stops / periods in the version number will cause the add-on to silently fail installing.
 
 ## Installing Python and Getting PTVSD
 
@@ -107,10 +112,12 @@ Now in Blender the text editor will show this little red button in the top left.
 # Troubleshooting
 
 - Check you installed the correct ptvsd version.
-- To determine whether the problem is on Blender's side or your editor's: Close Blender and download/copy this [test script](https://gist.github.com/AlansCodeLog/ff1b246a8e31938e1c3dbfdcbb90522f) and run it with Python then and try to connect to the server with your editor. If you're still getting problem's than the problem is with VS Code.
-   - Check your detected your Python install, or set it manually.
-   - For VS Code try reinstalling the VS Code Python extension.
-   
+- To determine whether the problem is on Blender's side or your editor's: Close Blender and download/copy this [test script](https://gist.github.com/AlansCodeLog/ff1b246a8e31938e1c3dbfdcbb90522f) and run it with Python, and then try to connect to the server with your editor. If you're still getting problems then the problem is with VS Code, try:
+      - Check your detected your Python install, or set it manually.
+      - For VS Code try reinstalling the VS Code Python extension.
+
+Otherwise, if nothing works, don't hesitate to file an issue.
+
 # Notes
 
 <a id="f1" href="#n1">1.</a> Technically, the add-on will work with Python 2 as well since it doesn't use Python itself, just the ptvsd package, so it doesn't really matter whether you installed it with Python 2 or 3 because the package is compatible with both. On the VS Code side though, the Python extension does need to know where Python is (though not ptvsd), but it still will connect if it's using Python 2, just IntelliSense recommendations the will be wrong.

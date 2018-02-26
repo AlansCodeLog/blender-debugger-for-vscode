@@ -2,6 +2,10 @@
 
 OS:
 
+Add-on Version:
+
+Blender Version:
+
 VS Code Version:
 
 VS Code Python Extension Version:
@@ -18,4 +22,4 @@ Python path/interpreter detected/selected by VS Code / Visual Studio: <!-- See C
 
 ## Notes:
 
-<!-- Describe your problem, including any specific errors.  -->
+<!-- Describe your problem and the steps to reproduce it, including any specific errors. -->

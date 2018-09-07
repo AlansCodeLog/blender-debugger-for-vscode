@@ -21,7 +21,7 @@ Created by Alan North
 bl_info = {
    'name': 'Debugger for VS Code',
    'author': 'Alan North',
-   'version': (0, 1, 1),
+   'version': (0, 2, 0),
    'blender': (2, 79, 0),
    "description": "Starts debugging server for VS Code.",
    'location': 'In search (default shortcut:space) type "Debug"',
@@ -37,46 +37,38 @@ import os
 import subprocess
 import re
 
-# check path for ptvsd
+# finds path to ptvsd if it exists
 def check_for_ptvsd():
-   #check for python with where/whereis
-   python_exe = None
-   try:
-      python_exe = subprocess.Popen(
-         ["whereis", "python"],
-         shell=False,
-         stdout=subprocess.PIPE,
-         stderr=subprocess.PIPE
-      )
-   except Exception: 
-      pass
-   if python_exe is None:
-      try: 
-         python_exe = subprocess.Popen(
-               ["where", "python"],
-               shell=False,
-               stdout=subprocess.PIPE,
-               stderr=subprocess.PIPE
-            )
+   #commands to check
+   checks = [
+      ["where", "python"],
+      ["whereis", "python"],
+      ["which", "python"],
+   ]
+   location = None
+   for command in checks:
+      try:
+         location = subprocess.Popen(
+            command,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+         )
       except Exception: 
-         pass
-   if python_exe is None:
-      try: 
-         python_exe = subprocess.Popen(
-               ["which", "python"],
-               shell=False,
-               stdout=subprocess.PIPE,
-               stderr=subprocess.PIPE
-            )
-      except Exception: 
-         pass
-   if python_exe is not None:
-      python_exe = str(python_exe.communicate()[0], "utf-8")
-      match = re.search(".*(\\\\|/)", python_exe).group() 
-      if os.path.exists(match+"lib\site-packages\ptvsd"):
-         return match+"lib\site-packages"
+         continue
+      if location is not None:
+         location = str(location.communicate()[0], "utf-8")
+         #normalize slashes
+         location = re.sub("\\\\", "/", location)
+         #extract path up to last slash
+         match = re.search(".*(/)", location)
+         if match is not None:
+            match = match.group() 
+            if os.path.exists(match+"lib/site-packages/ptvsd"):
+               match = match+"lib/site-packages"
+               return match
 
-   #check in our path
+   #check in path just in case PYTHONPATH happens to be set
    for path in sys.path:
       if os.path.exists(path+"\ptvsd"):
          return path
@@ -177,13 +169,9 @@ class DebugServerStart(bpy.types.Operator):
       global ptvsd #so we can do check later
       import ptvsd
 
-      version = re.sub("\.", "", ptvsd.__version__)
-      if int(version) > 3000: 
-         print("Warning: PTVSD version " + ptvsd.__version__ + " is greater than 3.0.0, it will not work with VS Code.")
-
       # can only be attached once, no way to detach (at least not that I understand?)
       try:
-         ptvsd.enable_attach("my_secret", address = ("0.0.0.0", 3000))
+         ptvsd.enable_attach(("0.0.0.0", 3000), redirect_output=True)
       except:
          print("Server already running.")
 

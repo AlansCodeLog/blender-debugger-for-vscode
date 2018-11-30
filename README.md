@@ -1,4 +1,4 @@
-﻿# Blender Debugger for VS Code (and Visual Studio)
+# Blender Debugger for VS Code (and Visual Studio)
 
 Inspired by [Blender-VScode-Debugger](https://github.com/Barbarbarbarian/Blender-VScode-Debugger) which was itself inspired by this [remote_debugger](https://github.com/sybrenstuvel/random-blender-addons/blob/master/remote_debugger.py) for pycharm as explained in this [Blender Developer's Blog post](https://code.blender.org/2015/10/debugging-python-code-with-pycharm/). 
 
@@ -86,9 +86,7 @@ Go to the Debugging tab and add a configuration. Pick Python. You'll want the co
       "name": "Python: Attach",
       "type": "python",
       "request": "attach",
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "${workspaceFolder}",
-      "port": 3000,
+      "port": 5678, //careful, this used to be 3000 in older versions of vscode and this addon
       "host": "localhost"
    },
 ```
@@ -123,8 +121,9 @@ Now in Blender the text editor will show this little red button in the top left.
 - To determine whether the problem is on Blender's side or your editor's: Close Blender and download/copy this [test script](https://gist.github.com/AlansCodeLog/ff1b246a8e31938e1c3dbfdcbb90522f) and run it with Python, and then try to connect to the server with your editor. If you're still getting problems then the problem is with VS Code, try:
       - Check your detected your Python install, or set it manually.
       - For VS Code try reinstalling the VS Code Python extension.
+- If you've been using this addon for a while and it's suddenly giving you a connection error, it might be because the default port has changed. VS Code's Python extension (vscode-python) has changed their default port from 3000 to 5678, so I have changed the default accordingly. I've made it configurable now though, so just check the port the addon is set to matches the one in your `launch.json` in VS Code.
 
-Otherwise, if nothing works, don't hesitate to file an issue.
+Otherwise, if none of that helped, don't hesitate to file an issue.
 
 # Notes
 

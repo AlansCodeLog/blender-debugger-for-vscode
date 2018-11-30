@@ -21,7 +21,7 @@ Created by Alan North
 bl_info = {
    'name': 'Debugger for VS Code',
    'author': 'Alan North',
-   'version': (0, 2, 0),
+   'version': (0, 3, 0),
    'blender': (2, 79, 0),
    "description": "Starts debugging server for VS Code.",
    'location': 'In search (default shortcut:space) type "Debug"',
@@ -92,18 +92,32 @@ class DebuggerPreferences(bpy.types.AddonPreferences):
       name="Timeout",
       default=20
    )
+
+   port = bpy.props.IntProperty(
+      name="Port",
+      min=0,
+      max=65535,
+      default=5678
+   )
    def draw(self, context):
       layout = self.layout
-      layout.prop(self, "path")
-      layout.label(text="Pluging will try to auto-find it, if no path found, or you would like to use a different path, set it here.")
-      row = layout.split()
-      row.label(text="Timeout in seconds for attach confirmation listener.")
-      row.prop(self, "timeout")
+      row_path = layout
+      row_path.label(text="The addon will try to auto-find the location to ptvsd, if no path is found, or you would like to use a different path, set it here.")
+      row_path.prop(self, "path")
+
+      row_timeout = layout.split()
+      row_timeout.prop(self, "timeout")
+      row_timeout.label(text="Timeout in seconds for the attach confirmation listener.")
+
+      row_port = layout.split()
+      row_port.prop(self, "port")
+      row_port.label(text="Port to use. Should match port in VS Code's launch.json.")
+
 
 # check if debugger has attached
-def check_done(i, modal_limit):
+def check_done(i, modal_limit, prefs):
    if i == 0 or i % 60 == 0:
-      print("Waiting...")
+      print("Waiting... (on port "+str(prefs.port)+")")
    if i > modal_limit:
       print("Attach Confirmation Listener Timed Out")
       return {"CANCELLED"}
@@ -125,7 +139,8 @@ class DebuggerCheck(bpy.types.Operator):
    def modal(self, context, event):
       self.count = self.count + 1
       if event.type == "TIMER":
-         return check_done(self.count, self.modal_limit)
+         prefs = bpy.context.user_preferences.addons[__name__].preferences
+         return check_done(self.count, self.modal_limit, prefs)
       return {"PASS_THROUGH"} 
 
    def execute(self, context):
@@ -153,6 +168,7 @@ class DebugServerStart(bpy.types.Operator):
       #get ptvsd and import if exists
       prefs = bpy.context.user_preferences.addons[__name__].preferences
       ptvsd_path = prefs.path
+      ptvsd_port = prefs.port
 
       #actually check ptvsd is still available
       if ptvsd_path == "PTVSD not Found":
@@ -171,7 +187,7 @@ class DebugServerStart(bpy.types.Operator):
 
       # can only be attached once, no way to detach (at least not that I understand?)
       try:
-         ptvsd.enable_attach(("0.0.0.0", 3000), redirect_output=True)
+         ptvsd.enable_attach(("0.0.0.0", ptvsd_port), redirect_output=True)
       except:
          print("Server already running.")
 

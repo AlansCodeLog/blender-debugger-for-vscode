@@ -22,9 +22,9 @@ bl_info = {
    'name': 'Debugger for VS Code',
    'author': 'Alan North',
    'version': (0, 3, 0),
-   'blender': (2, 79, 0),
+   'blender': (2, 80, 0),
    "description": "Starts debugging server for VS Code.",
-   'location': 'In search (default shortcut:space) type "Debug"',
+   'location': 'In search type "Debug"',
    "warning": "",
    "wiki_url": "https://github.com/AlansCodeLog/blender-debugger-for-vscode",
    "tracker_url": "https://github.com/AlansCodeLog/blender-debugger-for-vscode/issues",
@@ -150,7 +150,7 @@ class DebuggerCheck(bpy.types.Operator):
       self.modal_limit = prefs.timeout*60
 
       wm = context.window_manager
-      self._timer = wm.event_timer_add(0.1, context.window)
+      self._timer = wm.event_timer_add(0.1, window=context.window)
       wm.modal_handler_add(self)
       return {"RUNNING_MODAL"}
 
@@ -195,11 +195,12 @@ class DebugServerStart(bpy.types.Operator):
       bpy.ops.debug.check_for_debugger()
       return {"FINISHED"}
    
-def register():
-   bpy.utils.register_module(__name__)
-
-def unregister():
-   bpy.utils.unregister_module(__name__)
+classes = (
+   DebuggerPreferences,
+   DebuggerCheck,
+   DebugServerStart,
+)
+register, unregister = bpy.utils.register_classes_factory(classes)
 
 if __name__ == "__main__":
    register()

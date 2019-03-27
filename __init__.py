@@ -24,7 +24,7 @@ bl_info = {
    'version': (0, 3, 0),
    'blender': (2, 80, 0),
    "description": "Starts debugging server for VS Code.",
-   'location': 'In search type "Debug"',
+   'location': 'In search (default shortcut:space) type "Debug"',
    "warning": "",
    "wiki_url": "https://github.com/AlansCodeLog/blender-debugger-for-vscode",
    "tracker_url": "https://github.com/AlansCodeLog/blender-debugger-for-vscode/issues",
@@ -54,7 +54,7 @@ def check_for_ptvsd():
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
          )
-      except Exception: 
+      except Exception:
          continue
       if location is not None:
          location = str(location.communicate()[0], "utf-8")
@@ -63,7 +63,7 @@ def check_for_ptvsd():
          #extract path up to last slash
          match = re.search(".*(/)", location)
          if match is not None:
-            match = match.group() 
+            match = match.group()
             if os.path.exists(match+"lib/site-packages/ptvsd"):
                match = match+"lib/site-packages"
                return match
@@ -82,18 +82,18 @@ def check_for_ptvsd():
 class DebuggerPreferences(bpy.types.AddonPreferences):
    bl_idname = __name__
 
-   path = bpy.props.StringProperty(
+   path: bpy.props.StringProperty(
       name="Location of PTVSD",
       subtype="DIR_PATH",
       default=check_for_ptvsd()
    )
 
-   timeout = bpy.props.IntProperty(
+   timeout: bpy.props.IntProperty(
       name="Timeout",
       default=20
    )
 
-   port = bpy.props.IntProperty(
+   port: bpy.props.IntProperty(
       name="Port",
       min=0,
       max=65535,
@@ -125,7 +125,7 @@ def check_done(i, modal_limit, prefs):
       return {"PASS_THROUGH"}
    print('Debugger is Attached')
    return {"FINISHED"}
-   
+
 class DebuggerCheck(bpy.types.Operator):
    bl_idname = "debug.check_for_debugger"
    bl_label = "Debug: Check if VS Code is Attached"
@@ -139,14 +139,14 @@ class DebuggerCheck(bpy.types.Operator):
    def modal(self, context, event):
       self.count = self.count + 1
       if event.type == "TIMER":
-         prefs = bpy.context.user_preferences.addons[__name__].preferences
+         prefs = bpy.context.preferences.addons[__name__].preferences
          return check_done(self.count, self.modal_limit, prefs)
-      return {"PASS_THROUGH"} 
+      return {"PASS_THROUGH"}
 
    def execute(self, context):
       # set initial variables
       self.count = 0
-      prefs = bpy.context.user_preferences.addons[__name__].preferences
+      prefs = bpy.context.preferences.addons[__name__].preferences
       self.modal_limit = prefs.timeout*60
 
       wm = context.window_manager
@@ -159,14 +159,14 @@ class DebuggerCheck(bpy.types.Operator):
       wm = context.window_manager
       wm.event_timer_remove(self._timer)
 
-class DebugServerStart(bpy.types.Operator): 
+class DebugServerStart(bpy.types.Operator):
    bl_idname = "debug.connect_debugger_vscode"
    bl_label = "Debug: Start Debug Server for VS Code"
    bl_description = "Starts ptvsd server for debugger to attach to."
-   
+
    def execute(self, context):
       #get ptvsd and import if exists
-      prefs = bpy.context.user_preferences.addons[__name__].preferences
+      prefs = bpy.context.preferences.addons[__name__].preferences
       ptvsd_path = prefs.path
       ptvsd_port = prefs.port
 
@@ -174,7 +174,7 @@ class DebugServerStart(bpy.types.Operator):
       if ptvsd_path == "PTVSD not Found":
          self.report({"ERROR"}, "Couldn't detect ptvsd, please specify the path manually in the addon preferences or reload the addon if you installed ptvsd after enabling it.")
          return {"CANCELLED"}
-      
+
       if not os.path.exists(os.path.abspath(ptvsd_path+"/ptvsd")):
          self.report({"ERROR"}, "Can't find ptvsd at: %r/ptvsd." % ptvsd_path)
          return {"CANCELLED"}
@@ -194,7 +194,7 @@ class DebugServerStart(bpy.types.Operator):
       # call our confirmation listener
       bpy.ops.debug.check_for_debugger()
       return {"FINISHED"}
-   
+
 classes = (
    DebuggerPreferences,
    DebuggerCheck,

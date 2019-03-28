@@ -70,12 +70,12 @@ def check_for_ptvsd():
 
    #check in path just in case PYTHONPATH happens to be set
    for path in sys.path:
-      if os.path.exists(path+"\ptvsd"):
+      if os.path.exists(path+"/ptvsd"):
          return path
-      if os.path.exists(path+"\site-packages\ptvsd"):
-         return path+"\site-packages"
-      if os.path.exists(path+"\lib\site-packages\ptvsd"):
-         return path+"lib\site-packages"
+      if os.path.exists(path+"/site-packages/ptvsd"):
+         return path+"/site-packages"
+      if os.path.exists(path+"/lib/site-packages/ptvsd"):
+         return path+"lib/site-packages"
    return "PTVSD not Found"
 
 # Preferences
@@ -129,7 +129,7 @@ def check_done(i, modal_limit, prefs):
 class DebuggerCheck(bpy.types.Operator):
    bl_idname = "debug.check_for_debugger"
    bl_label = "Debug: Check if VS Code is Attached"
-   bl_description = "Starts modal timer that checks if debugger attached until attached or until timeout."
+   bl_description = "Starts modal timer that checks if debugger attached until attached or until timeout"
 
    _timer = None
    count = 0
@@ -162,7 +162,7 @@ class DebuggerCheck(bpy.types.Operator):
 class DebugServerStart(bpy.types.Operator):
    bl_idname = "debug.connect_debugger_vscode"
    bl_label = "Debug: Start Debug Server for VS Code"
-   bl_description = "Starts ptvsd server for debugger to attach to."
+   bl_description = "Starts ptvsd server for debugger to attach to"
 
    def execute(self, context):
       #get ptvsd and import if exists

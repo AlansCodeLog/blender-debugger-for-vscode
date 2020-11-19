@@ -11,6 +11,7 @@ Now it can:
 - Tell you when the debugger has actually attached.
 
 ![Image Showing VS Code side by side with Blender paused at a breakpoint. In the console, a "Debugger is Attached" Statement is printed.](./Example.png)
+Note: This video is now a bit old, it was made with Blender 2.79. If you are using the current version of Blender, some minor things have changed, but the general usage is still the same.
 
 # How to Use
 
@@ -35,12 +36,13 @@ If you download the add-on from the releases page, please make sure to rename th
 ## Installing Python and Getting PTVSD
 
 Install Python 3 with pip and check add to PATH.<sup id="n1">[1](#f1)</sup>
-	- If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It checks `where python` or `whereis python` or `which python` to try and determine where python is and uses the first path given<sup id="n2">[2](#f2)</sup>.
-	- If you are using something like Conda and want to use a virtual environment, to have the addon auto-detect the path you can: activate the environment, run Blender from the command line, and it should work.
+
+- If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It checks `where python` or `whereis python` or `which python` to try and determine where python is and uses the first path given<sup id="n2">[2](#f2)</sup>.
+- If you are using something like Conda and want to use a virtual environment, to have the addon auto-detect the path you can: activate the environment, run Blender from the command line, and it should work.
 
 `pip install ptvsd`
-	- The following is no longer the case, the latest ptvsd version should work just fine now. <strike>Newer versions will not work, the add-on will warn you in the console if the version is above 3.0.0. Later versions aren't supported yet in VS Code, and it will throw an error when trying to connect. See [Debugging Python with VS Code](https://code.visualstudio.com/docs/python/debugging#_remote-debugging) and [#514](https://github.com/Microsoft/vscode-python/issues/514).</strike>
-	- For Visual Studio, later versions should work depending on the Visual Studio version. I have never used Visual Studio, but you can find more info on setting everything up here: [Remotely Debugging Python Code on Linux](https://docs.microsoft.com/en-us/visualstudio/python/debugging-python-code-on-remote-linux-machines#connection-troubleshooting). (it is not Linux specific)
+
+- For Visual Studio, the ptvsd version that works depends on the Visual Studio version. I have never used Visual Studio, but you can find more info on setting everything up here: [Remotely Debugging Python Code on Linux](https://docs.microsoft.com/en-us/visualstudio/python/debugging-python-code-on-remote-linux-machines#connection-troubleshooting). (it is not Linux specific)
 
 ## Setting up your Addon
 
@@ -68,9 +70,13 @@ If it did not find the path it'll say "PTVSD not Found", you'll have to set it m
 
 If you want, increase the timeout for the confirmation. It'll print "Waiting..." in the console every second until it prints it's timedout. This does not mean the server has timedout *just* the confirmation listener.
 
-Open up Blender's search (default shortcut: space), type "Debug".
+If you're using Blender 2.9 you must turn on `Developer Extras` (`Preferences => Display => Developer Extras`) if you haven't already, otherwise the addon's commands won't turn up in the search.
 
-Click `Debug: Start Debug Server for VS Code`. Note: you can only start the server once. You cannot stop it, at least from what I understand. If you run it again it'll just tell you it's already running and start the timer again to check for a confirmation.
+Open up Blender's search (default shortcut: F3), type "Debug".
+
+Click `Debug: Start Debug Server for VS Code`.
+
+Note: you can only start the server once. You cannot stop it, at least from what I understand. If you run it again it'll just tell you it's already running and start the timer again to check for a confirmation.
 
 ## Connecting the Editor
 

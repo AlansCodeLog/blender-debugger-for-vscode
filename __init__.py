@@ -21,8 +21,8 @@ Created by Alan North
 bl_info = {
    'name': 'Debugger for VS Code',
    'author': 'Alan North',
-   'version': (1, 0, 0),
-   'blender': (2, 80, 0),
+   'version': (1, 0, 1),
+   'blender': (2, 80, 0), # supports 2.8+
    "description": "Starts debugging server for VS Code.",
    'location': 'In search (Edit > Operator Search) type "Debug"',
    "warning": "",

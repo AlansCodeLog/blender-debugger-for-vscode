@@ -70,6 +70,7 @@ def check_for_ptvsd():
 
    #check in path just in case PYTHONPATH happens to be set
    for path in sys.path:
+      path = path.rstrip("/")
       if os.path.exists(path+"/ptvsd"):
          return path
       if os.path.exists(path+"/site-packages/ptvsd"):
@@ -167,7 +168,7 @@ class DebugServerStart(bpy.types.Operator):
    def execute(self, context):
       #get ptvsd and import if exists
       prefs = bpy.context.preferences.addons[__name__].preferences
-      ptvsd_path = prefs.path
+      ptvsd_path = prefs.path.rstrip("/")
       ptvsd_port = prefs.port
 
       #actually check ptvsd is still available

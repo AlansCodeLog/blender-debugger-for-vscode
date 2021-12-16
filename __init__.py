@@ -38,8 +38,8 @@ import subprocess
 import re
 
 # finds path to ptvsd if it exists
-def check_for_ptvsd():
-   #commands to check
+def check_for_debugpy():
+  # commands to check
    checks = [
       ["where", "python"],
       ["whereis", "python"],
@@ -64,29 +64,30 @@ def check_for_ptvsd():
          match = re.search(".*(/)", location)
          if match is not None:
             match = match.group()
-            if os.path.exists(match+"lib/site-packages/ptvsd"):
+            if os.path.exists(match+"lib/site-packages/debugpy"):
                match = match+"lib/site-packages"
                return match
 
-   #check in path just in case PYTHONPATH happens to be set
+   # check in path just in case PYTHONPATH happens to be set
+   # this is not going to work because Blender's sys.path is different
    for path in sys.path:
       path = path.rstrip("/")
-      if os.path.exists(path+"/ptvsd"):
+      if os.path.exists(path+"/debugpy"):
          return path
-      if os.path.exists(path+"/site-packages/ptvsd"):
+      if os.path.exists(path+"/site-packages/debugpy"):
          return path+"/site-packages"
-      if os.path.exists(path+"/lib/site-packages/ptvsd"):
+      if os.path.exists(path+"/lib/site-packages/debugpy"):
          return path+"lib/site-packages"
-   return "PTVSD not Found"
+   return "debugpy not Found"
 
 # Preferences
 class DebuggerPreferences(bpy.types.AddonPreferences):
    bl_idname = __name__
 
    path: bpy.props.StringProperty(
-      name="Location of PTVSD",
+      name="Location of debugpy",
       subtype="DIR_PATH",
-      default=check_for_ptvsd()
+      default=check_for_debugpy()
    )
 
    timeout: bpy.props.IntProperty(
@@ -122,7 +123,7 @@ def check_done(i, modal_limit, prefs):
    if i > modal_limit:
       print("Attach Confirmation Listener Timed Out")
       return {"CANCELLED"}
-   if not ptvsd.is_attached():
+   if not debugpy.is_client_connected():
       return {"PASS_THROUGH"}
    print('Debugger is Attached')
    return {"FINISHED"}
@@ -163,32 +164,33 @@ class DebuggerCheck(bpy.types.Operator):
 class DebugServerStart(bpy.types.Operator):
    bl_idname = "debug.connect_debugger_vscode"
    bl_label = "Debug: Start Debug Server for VS Code"
-   bl_description = "Starts ptvsd server for debugger to attach to"
+   bl_description = "Starts debugpy server for debugger to attach to"
 
    def execute(self, context):
-      #get ptvsd and import if exists
+      #get debugpy and import if exists
       prefs = bpy.context.preferences.addons[__name__].preferences
-      ptvsd_path = prefs.path.rstrip("/")
-      ptvsd_port = prefs.port
+      debugpy_path = prefs.path.rstrip("/")
+      debugpy_port = prefs.port
 
       #actually check ptvsd is still available
-      if ptvsd_path == "PTVSD not Found":
-         self.report({"ERROR"}, "Couldn't detect ptvsd, please specify the path manually in the addon preferences or reload the addon if you installed ptvsd after enabling it.")
+      if debugpy_path == "PTVSD not Found":
+         self.report({"ERROR"}, "Couldn't detect debugpy, please specify the path manually in the addon preferences or reload the addon if you installed ptvsd after enabling it.")
          return {"CANCELLED"}
 
-      if not os.path.exists(os.path.abspath(ptvsd_path+"/ptvsd")):
-         self.report({"ERROR"}, "Can't find ptvsd at: %r/ptvsd." % ptvsd_path)
+      if not os.path.exists(os.path.abspath(debugpy_path+"/debugpy")):
+         self.report({"ERROR"}, "Can't find debugpy at: %r/debugpy." % debugpy_path)
          return {"CANCELLED"}
 
-      if not any(ptvsd_path in p for p in sys.path):
-         sys.path.append(ptvsd_path)
+      if not any(debugpy_path in p for p in sys.path):
+         sys.path.append(debugpy_path)
 
-      global ptvsd #so we can do check later
-      import ptvsd
+      global debugpy #so we can do check later
+      import debugpy
 
       # can only be attached once, no way to detach (at least not that I understand?)
       try:
-         ptvsd.enable_attach(("0.0.0.0", ptvsd_port), redirect_output=True)
+         debugpy.listen(("localhost", debugpy_port))
+         debugpy.wait_for_client()
       except:
          print("Server already running.")
 

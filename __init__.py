@@ -190,7 +190,6 @@ class DebugServerStart(bpy.types.Operator):
       # can only be attached once, no way to detach (at least not that I understand?)
       try:
          debugpy.listen(("localhost", debugpy_port))
-         debugpy.wait_for_client()
       except:
          print("Server already running.")
 

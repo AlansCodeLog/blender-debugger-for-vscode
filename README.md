@@ -6,20 +6,20 @@ Since the VS Code one wasn't really well documented and it looked kind of dead, 
 
 Now it can:
 
-- Auto-detect where python is and auto set the path to ptvsd if installed.
-- Warn you if you installed the wrong ptvsd version (for VS Code, for Visual Studio it should still work)
+- Auto-detect where python is and auto set the path to debugpy if installed.
 - Tell you when the debugger has actually attached.
 
 ![Image Showing VS Code side by side with Blender paused at a breakpoint. In the console, a "Debugger is Attached" Statement is printed.](./Example.png)
-Note: This video is now a bit old, it was made with Blender 2.79. If you are using the current version of Blender, some minor things have changed, but the general usage is still the same.
 
 # How to Use
 
 I have made a video (click the image below) for those who just started messing with python in Blender or programming in general, but if you're semi-familiar with Python, VS Code, and the command line the following should make sense. If you have any questions or suggestions, don't hesitate to file an issue.
 
 #### NOTES/EDITS
-- ptvsd doesn't have to be version 3.0.0 anymore, so you can now ignore that and just `pip install ptvsd`
-- This video was done with blender 2.79, but everything still works 99% the same. I think the only change is that blender changed the default shortcut to the search menu.
+- This video was done with blender 2.79, but everything still works mostly the same. Only changes are:
+	- Blender changed the default shortcut to the search menu.
+	- **ptvsd has been replaced by debugpy**
+	- Blender now requires you enable `Settings => Interface => Developer Extras` before you can see the commands.
 
 <p align="center" style="position:relative;">
 	<a href="https://www.youtube.com/watch?v=UVDf2VSmRvk" title="Click to go to Video">
@@ -29,20 +29,20 @@ I have made a video (click the image below) for those who just started messing w
 
 ## Note on Downloading
 
-The best way to download is through the green `Clone or Download` button above.
+**You must down it with the the green `Clone or Download` button above. DO NOT download it from releases!**
 
-If you download the add-on from the releases page, please make sure to rename the zip to `blender-debugger-for-vscode-master.zip`, otherwise the full stops / periods in the version number will cause the add-on to silently fail installing.
+This is because blender has a problem with the periods in the name from the version number. It used to be you could rename the zip, but this no longer works, you'll get an error when you try to enable the addon. The onyl fix is to go where the addon was installed and rename the folder there.
 
-## Installing Python and Getting PTVSD
+## Installing Python and Getting Debugpy
 
 Install Python 3 with pip and check add to PATH.<sup id="n1">[1](#f1)</sup>
 
 - If you already have python installed and you can run it from the command line (aka PATH is set), the addon should find it. It checks `where python` or `whereis python` or `which python` to try and determine where python is and uses the first path given<sup id="n2">[2](#f2)</sup>.
 - If you are using something like Conda and want to use a virtual environment, to have the addon auto-detect the path you can: activate the environment, run Blender from the command line, and it should work.
 
-`pip install ptvsd`
+`pip install debugpy`
 
-- For Visual Studio, the ptvsd version that works depends on the Visual Studio version. I have never used Visual Studio, but you can find more info on setting everything up here: [Remotely Debugging Python Code on Linux](https://docs.microsoft.com/en-us/visualstudio/python/debugging-python-code-on-remote-linux-machines#connection-troubleshooting). (it is not Linux specific)
+- For Visual Studio, the debugpy version that works depends on the Visual Studio version. I have never used Visual Studio, but you can find more info on setting everything up here: [Remotely Debugging Python Code on Linux](https://docs.microsoft.com/en-us/visualstudio/python/debugging-python-code-on-remote-linux-machines#connection-troubleshooting). (it is not Linux specific)
 
 ## Setting up your Addon
 
@@ -66,11 +66,11 @@ Now remove your addon from Blender if you had installed it manually already, sav
 
 Install the addon.
 
-If it did not find the path it'll say "PTVSD not Found", you'll have to set it manually. It's wherever python is + "\lib\site-packages". NO trailing backslash.
+If it did not find the path it'll say "debugpy not found", you'll have to set it manually. It's wherever python is + "\lib\site-packages". NO trailing backslash.
 
 If you want, increase the timeout for the confirmation. It'll print "Waiting..." in the console every second until it prints it's timedout. This does not mean the server has timedout *just* the confirmation listener.
 
-If you're using Blender 2.9 you must turn on `Developer Extras` (`Preferences => Display => Developer Extras`) if you haven't already, otherwise the addon's commands won't turn up in the search.
+If you're using Blender 2.9+ you must turn on `Developer Extras` (`Preferences => Display => Developer Extras`) if you haven't already, otherwise the addon's commands won't turn up in the search.
 
 Open up Blender's search (default shortcut: F3), type "Debug".
 
@@ -123,8 +123,8 @@ Now in Blender the text editor will show this little red button in the top left.
 
 # Troubleshooting
 
-- Check you installed the correct ptvsd version. With VS Code this should no longer be an issue, but I believe different versions of Visual Studio need different versions of ptvsd (see [Installing Python Support](https://docs.microsoft.com/en-us/visualstudio/python/installing-python-support-in-visual-studio)).
-- To determine whether the problem is on Blender's side or your editor's: Close Blender and download/copy this [test script](https://gist.github.com/AlansCodeLog/ff1b246a8e31938e1c3dbfdcbb90522f) and run it with Python, and then try to connect to the server with your editor. If you're still getting problems then the problem is with VS Code, try:
+- Check you installed the correct debugpy version. With VS Code this should no longer be an issue, but I believe different versions of Visual Studio need different versions of debugpy (see [Installing Python Support](https://docs.microsoft.com/en-us/visualstudio/python/installing-python-support-in-visual-studio)).
+- To determine whether the problem is on Blender's side or your editor's: Close Blender and this [test script](https://github.com/AlansCodeLog/blender-debugger-for-vscode/blob/master/test.py), you can copy/download it or run it from the addon folder. Run it with Python `python test.py`, and then try to connect to the server with your editor. If you're still getting problems then the problem is with VS Code, try:
 		- Check your detected your Python install, or set it manually.
 		- For VS Code try reinstalling the VS Code Python extension.
 - If you've been using this addon for a while and it's suddenly giving you a connection error, it might be because the default port has changed. VS Code's Python extension (vscode-python) has changed their default port from 3000 to 5678, so I have changed the default accordingly. I've made it configurable now though, so just check the port the addon is set to matches the one in your `launch.json` in VS Code.
@@ -133,6 +133,6 @@ Otherwise, if none of that helped, don't hesitate to file an issue.
 
 # Notes
 
-<a id="f1" href="#n1">1.</a> Technically, the add-on will work with Python 2 as well since it doesn't use Python itself, just the ptvsd package, so it doesn't really matter whether you installed it with Python 2 or 3 because the package is compatible with both. On the VS Code side though, the Python extension does need to know where Python is (though not ptvsd), but it will still connect if it's using Python 2, but your IntelliSense recommendations will be wrong in VS Code.
+<a id="f1" href="#n1">1.</a> Technically, the add-on will work with Python 2 as well since it doesn't use Python itself, just the debupy package, so it doesn't really matter whether you installed it with Python 2 or 3 because the package is compatible with both. On the VS Code side though, the Python extension does need to know where Python is (though not debugpy), but it will still connect if it's using Python 2, but your IntelliSense recommendations will be wrong in VS Code.
 
-<a id="f2" href="#n2">2.</a> The addon also detects python if PYTHONPATH is set (because Blender will add it to sys.path) or if you used the Python bundled with Blender to install ptvsd (but that's a bit of a pain because it doesn't have pip installed, you would have to install it manually).
+<a id="f2" href="#n2">2.</a> The addon also detects python if PYTHONPATH is set (because Blender will add it to sys.path) or if you used the Python bundled with Blender to install debugpy (but that's a bit of a pain because it doesn't have pip installed, you would have to install it manually).

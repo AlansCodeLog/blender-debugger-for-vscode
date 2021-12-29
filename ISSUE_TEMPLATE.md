@@ -13,7 +13,10 @@ VS Code Version:
 
 VS Code Python Extension Version:
 
-PTVSD Version:
+One of the following two depending on which version of the addon you're using (2.0+ uses debugpy instead of ptvsd):
+
+- ptvsd version:
+- debugpy version:
 
 Paths listed by `where python` or the corresponding command:
 

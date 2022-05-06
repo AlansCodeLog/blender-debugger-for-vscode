@@ -196,6 +196,7 @@ class DebugServerStart(bpy.types.Operator):
          print("Server already running.")
 
       if (self.isBackgroundMode):
+         self.report({"INFO"}, "Ready for connection")
          debugpy.wait_for_client()
          
       # call our confirmation listener

@@ -106,6 +106,53 @@ At this point you should be able to add a breakpoint and when you trigger it in 
 
 Note though that if you make changes to the file, Blender will not detect them. Have open `User Preferences > Addons` so you can toggle your addon on and off when you make changes. If anyone knows any way to improve this I'd love to know.
 
+## Advanced Usage
+
+### Wait for Client
+
+The debugger can be made to wait for a client to connect (this will pause all execution). This can be useful for debugging the connection or when running blender headless / in background mode.
+
+To do so, call the server connect command from the python console or from a script/addon like so:
+
+```python
+bpy.ops.debug.connect_debugger_vscode(waitForClient=True)
+```
+
+#### Running in Headless Mode
+
+First make sure the addon is installed, enabled, and works when you run blender normally.
+
+Blender can then be run in background mode with the `-b/--background` switch (e.g. `blender --background`, `blender --background --python your_script.py`).
+
+See [Blender Command Line](https://docs.blender.org/manual/en/latest/advanced/command_line/introduction.html).
+
+You can detect when blender is run in background/headless mode and make the debugger pause and wait for a connection in your script/addon:
+
+```python
+if bpy.app.background:
+	bpy.ops.debug.connect_debugger_vscode(waitForClient=True)
+```
+
+This will wait for a connection to be made to the debugging server. Once this is established, the script will continue executing and VSCode should pause on breakpoints that have been triggered.
+
+For addons, you will need to do this from a handler:
+
+```python
+from bpy.app.handlers import persistent
+#...
+def register():
+   bpy.app.handlers.load_post.append(load_handler)
+#...
+@persistent
+def load_handler(dummy):
+	# remove handler so it only runs once
+   bpy.app.handlers.load_post.remove(load_handler)
+   if bpy.app.background:
+      bpy.ops.debug.connect_debugger_vscode(waitForClient=True)
+
+```
+See [Application Handlers](https://docs.blender.org/api/current/bpy.app.handlers.html)
+
 ### Debugging/Editing Source Code
 
 It is possible to edit the Blender source code but it can be a bit tricky to get it to detect changes (nevermind live editing is buggy anyways).

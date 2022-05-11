@@ -123,13 +123,13 @@ Now in Blender the text editor will show this little red button in the top left.
 
 ### Debugging Blender running via command line
 
-Ensure that the addon is installed, enabled and attempts to connect to the debugging server in the script passed as an argument to Blender. 
+In your script that will be executed by Blender, ensure that the addon is installed, enabled and attempts to connect to the debugging server
 
 In a terminal, call for Blender to execute your script with the flags `-b -P` or `-b --python`. More information can be found here [Blender Command Line Mode](https://docs.blender.org/manual/en/latest/advanced/command_line/introduction.html)
 
-Once this script executes, it will await a connection to be made to the debugging server. Once this is established, the script will continue executing and VSCode should pause on breakpoints that have been triggered.
+This script will execute and then await a connection to be made to the debugging server. Once this is established, the script will continue executing and VSCode should pause on breakpoints that have been triggered.
 
-Note: You can use bpy.app.background to identify when Blender is running in the background.
+Note: The addon is using the bpy.app.background boolean to identify when Blender is running in the background.
 
 # Troubleshooting
 

@@ -172,8 +172,6 @@ class DebugServerStart(bpy.types.Operator):
       debugpy_path = prefs.path.rstrip("/")
       debugpy_port = prefs.port
 
-      waitForClient: bpy.props.BoolProperty(default=False)
-
       #actually check debugpy is still available
       if debugpy_path == "debugpy not found":
          self.report({"ERROR"}, "Couldn't detect debugpy, please specify the path manually in the addon preferences or reload the addon if you installed debugpy after enabling it.")
@@ -195,7 +193,7 @@ class DebugServerStart(bpy.types.Operator):
       except:
          print("Server already running.")
 
-      if (self.waitForClient):
+      if (bpy.app.background):
          self.report({"INFO"}, "Ready to connect")
          debugpy.wait_for_client()
 

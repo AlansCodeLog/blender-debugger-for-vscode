@@ -121,6 +121,16 @@ Now in Blender the text editor will show this little red button in the top left.
 	See [Issue #4](https://github.com/AlansCodeLog/blender-debugger-for-vscode/issues/4) for a workaround.
 	In the future if I have some time, I might see if there's something I can do to make this easier.
 
+### Debugging Blender running via command line
+
+Ensure that the addon is installed, enabled and attempts to connect to the debugging server in the script passed as an argument to Blender. 
+
+In a terminal, call for Blender to execute your script with the flags `-b -P` or `-b --python`. More information can be found here [Blender Command Line Mode](https://docs.blender.org/manual/en/latest/advanced/command_line/introduction.html)
+
+Once this script executes, it will await a connection to be made to the debugging server. Once this is established, the script will continue executing and VSCode should pause on breakpoints that have been triggered.
+
+Note: You can use bpy.app.background to identify when Blender is running in the background.
+
 # Troubleshooting
 
 - Check you installed the correct debugpy version. With VS Code this should no longer be an issue, but I believe different versions of Visual Studio need different versions of debugpy (see [Installing Python Support](https://docs.microsoft.com/en-us/visualstudio/python/installing-python-support-in-visual-studio)).

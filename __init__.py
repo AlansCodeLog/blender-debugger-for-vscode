@@ -21,7 +21,7 @@ Created by Alan North
 bl_info = {
    'name': 'Debugger for VS Code',
    'author': 'Alan North',
-   'version': (2, 0, 0),
+   'version': (2, 1, 0),
    'blender': (2, 80, 0), # supports 2.8+
    "description": "Starts debugging server for VS Code.",
    'location': 'In search (Edit > Operator Search) type "Debug"',
@@ -166,13 +166,13 @@ class DebugServerStart(bpy.types.Operator):
    bl_label = "Debug: Start Debug Server for VS Code"
    bl_description = "Starts debugpy server for debugger to attach to"
 
-   isBackgroundMode : bpy.props.BoolProperty(default=False)
-
    def execute(self, context):
       #get debugpy and import if exists
       prefs = bpy.context.preferences.addons[__name__].preferences
       debugpy_path = prefs.path.rstrip("/")
       debugpy_port = prefs.port
+
+      waitForClient: bpy.props.BoolProperty(default=False)
 
       #actually check debugpy is still available
       if debugpy_path == "debugpy not found":
@@ -195,7 +195,8 @@ class DebugServerStart(bpy.types.Operator):
       except:
          print("Server already running.")
 
-      if (self.isBackgroundMode):
+      if (self.waitForClient):
+         self.report({"INFO"}, "Ready to connect")
          debugpy.wait_for_client()
 
       # call our confirmation listener

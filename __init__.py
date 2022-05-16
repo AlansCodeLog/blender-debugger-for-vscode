@@ -166,6 +166,8 @@ class DebugServerStart(bpy.types.Operator):
    bl_label = "Debug: Start Debug Server for VS Code"
    bl_description = "Starts debugpy server for debugger to attach to"
    
+   waitForClient: bpy.props.BoolProperty(default=False)
+
    def execute(self, context):
       #get debugpy and import if exists
       prefs = bpy.context.preferences.addons[__name__].preferences
@@ -193,7 +195,7 @@ class DebugServerStart(bpy.types.Operator):
       except:
          print("Server already running.")
 
-      if (bpy.app.background):
+      if (bpy.app.background or self.waitForClient):
          self.report({"INFO"}, "Ready to connect")
          debugpy.wait_for_client()
 

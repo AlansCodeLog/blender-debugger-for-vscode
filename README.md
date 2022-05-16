@@ -129,7 +129,7 @@ In a terminal, call for Blender to execute your script with the flags `-b -P you
 
 This script will execute and then await a connection to be made to the debugging server. Once this is established, the script will continue executing and VSCode should pause on breakpoints that have been triggered.
 
-Note: The addon is using the bpy.app.background boolean to identify when Blender is running in the background.
+Note: The addon is using the bpy.app.background boolean to identify when Blender is running in the background but it accepts a waitForClient property to force us to await the connection.
 
 # Troubleshooting
 

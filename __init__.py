@@ -21,7 +21,7 @@ Created by Alan North
 bl_info = {
    'name': 'Debugger for VS Code',
    'author': 'Alan North',
-   'version': (2, 1, 0),
+   'version': (2, 2, 0),
    'blender': (2, 80, 0), # supports 2.8+
    "description": "Starts debugging server for VS Code.",
    'location': 'In search (Edit > Operator Search) type "Debug"',
@@ -31,28 +31,52 @@ bl_info = {
    'category': 'Development',
 }
 
-import bpy
-import sys
 import os
-import subprocess
 import re
+import subprocess
+import sys
+
+import bpy
+
 
 # finds path to debugpy if it exists
 def check_for_debugpy():
+   pip_info = None
+   try:
+      pip_info = subprocess.Popen(
+          "pip show debugpy",
+          shell=True,
+          stdout=subprocess.PIPE,
+          stderr=subprocess.PIPE
+      )
+   except Exception as e:
+      print(e)
+      pass
+   if pip_info is not None:
+      pip_info = str(pip_info.communicate()[0], "utf-8")
+      pip_info = re.sub("\\\\", "/", pip_info)
+      #extract path up to last slash
+      match = re.search("Location: (.*)", pip_info)
+      #normalize slashes
+      if match is not None:
+         match = match.group(1)
+         if os.path.exists(match+"/debugpy"):
+            return match
+
   # commands to check
    checks = [
-      ["where", "python"],
-      ["whereis", "python"],
-      ["which", "python"],
+       ["where", "python"],
+       ["whereis", "python"],
+       ["which", "python"],
    ]
    location = None
    for command in checks:
       try:
          location = subprocess.Popen(
-            command,
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+             command,
+             shell=True,
+             stdout=subprocess.PIPE,
+             stderr=subprocess.PIPE
          )
       except Exception:
          continue
@@ -63,7 +87,7 @@ def check_for_debugpy():
          #extract path up to last slash
          match = re.search(".*(/)", location)
          if match is not None:
-            match = match.group()
+            match = match.group(1)
             if os.path.exists(match+"lib/site-packages/debugpy"):
                match = match+"lib/site-packages"
                return match

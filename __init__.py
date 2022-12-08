@@ -59,7 +59,7 @@ def check_for_debugpy():
       match = re.search("Location: (.*)", pip_info)
       #normalize slashes
       if match is not None:
-         match = match.group(1)
+         match = match.group(1).rstrip()
          if os.path.exists(match+"/debugpy"):
             return match
 

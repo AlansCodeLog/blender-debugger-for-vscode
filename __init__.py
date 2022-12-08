@@ -21,7 +21,7 @@ Created by Alan North
 bl_info = {
    'name': 'Debugger for VS Code',
    'author': 'Alan North',
-   'version': (2, 2, 0),
+   'version': (2, 2, 1),
    'blender': (2, 80, 0), # supports 2.8+
    "description": "Starts debugging server for VS Code.",
    'location': 'In search (Edit > Operator Search) type "Debug"',
@@ -59,7 +59,7 @@ def check_for_debugpy():
       match = re.search("Location: (.*)", pip_info)
       #normalize slashes
       if match is not None:
-         match = match.group(1)
+         match = match.group(1).rstrip()
          if os.path.exists(match+"/debugpy"):
             return match
 

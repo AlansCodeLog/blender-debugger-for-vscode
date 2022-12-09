@@ -60,6 +60,8 @@ Blender Stuff
 	├── ...
 ```
 
+See [Blender Docs => Installing Add-ons => User-Defined Add-on Path](https://docs.blender.org/manual/en/latest/editors/preferences/addons.html#:~:text=Add%20a%20subdirectory%20under%20my_scripts%20called%20addons%20(it%20must%20have%20this%20name%20for%20Blender%20to%20recognize%20it) for details.
+
 Now remove your addon from Blender if you had installed it manually already, save settings, and when you restart your addon should be installed automatically.
 
 ## Setting up this Addon

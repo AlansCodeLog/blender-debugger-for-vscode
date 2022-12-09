@@ -48,7 +48,7 @@ Install Python 3 with pip and check add to PATH.<sup id="n1">[1](#f1)</sup>
 
 This is the most important part. Otherwise it won't work. I thought it was my VS Code config but no, it was this.
 
-In Blender go to: `User Preferences > File` and set the path to `Scripts` to the folder you're developing your addon in (e.g: "C:\Code\Blender Stuff") BUT the folder must look like this:
+In Blender go to: `User Preferences > File` and set the path to `Scripts` to the folder you're developing your addon in (e.g: "C:\Code\Blender Stuff") BUT the folder must [look like this](https://docs.blender.org/manual/en/latest/editors/preferences/addons.html#:~:text=Add%20a%20subdirectory%20under%20my_scripts%20called%20addons%20(it%20must%20have%20this%20name%20for%20Blender%20to%20recognize%20it).):
 
 ```
 Blender Stuff
